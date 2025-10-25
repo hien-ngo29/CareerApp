@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Kết quả MBTI</title>
+<style>
+  body{font-family:system-ui,Segoe UI,Roboto,Arial;background:#071026;color:#e6eef8;padding:20px}
+  .box{max-width:900px;margin:auto;background:linear-gradient(180deg,#071122,#0b1726);padding:20px;border-radius:12px}
+  h1{color:#a78bfa;margin:0}
+  .score{margin-top:10px;font-weight:700}
+  ul{margin-top:8px}
+  .small{color:#9aa7bf;font-size:13px;margin-top:12px}
+  .actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+  .btn{background:#7c3aed;color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;border:none;cursor:pointer}
+  .btn.secondary{background:#2b394f}
+  .muted{color:#9aa7bf}
+</style>
+</head>
+<body>
+  <div class="box">
+    <h1>Kết quả MBTI</h1>
+    <div id="content" class="muted">Đang tải kết quả...</div>
+    <div class="actions" id="actions" style="display:none">
+      <button id="closeBtn" class="btn">Đóng tab</button>
+      <button id="copyBtn" class="btn secondary">Sao chép kết quả</button>
+      <button id="downloadBtn" class="btn">Tải kết quả (JSON)</button>
+    </div>
+    <div class="small">Nếu bạn mở trực tiếp file `result.html` mà không qua trang chính, hãy mở lại trang chính và nộp để có kết quả (result.html đọc từ localStorage key <code>mbti_result</code>).</div>
+  </div>
+
+<script>
+(function(){
+  const content = document.getElementById('content');
+  const actions = document.getElementById('actions');
+
+  function render(obj){
+    if(!obj){
+      content.innerHTML = '<div class="muted">Không tìm thấy kết quả. Hãy mở trang chính và nộp bài để tạo kết quả.</div>';
+      actions.style.display = 'none';
+      return;
+    }
+    const counts = obj.counts || {};
+    // determine letters
+    const l1 = (counts.E >= counts.I) ? 'E' : 'I';
+    const l2 = (counts.S >= counts.N) ? 'S' : 'N';
+    const l3 = (counts.T >= counts.F) ? 'T' : 'F';
+    const l4 = (counts.J >= counts.P) ? 'J' : 'P';
+    const mbti = obj.mbti || (l1+l2+l3+l4);
+
+    const desc = {
+      E: "Hướng ngoại: bạn năng động, dễ kết nối với người khác.",
+      I: "Hướng nội: bạn trầm tư, nạp năng lượng khi ở một mình.",
+      S: "Cảm nhận (Sensing): bạn thực tế, chú ý chi tiết và hiện tại.",
+      N: "Trực giác (Intuition): bạn hướng tới ý tưởng, khả năng tương lai.",
+      T: "Lý trí (Thinking): bạn ra quyết định dựa trên logic, lý lẽ.",
+      F: "Cảm xúc (Feeling): bạn ra quyết định dựa trên giá trị, cảm xúc.",
+      J: "Khuôn khổ (Judging): bạn thích kế hoạch, tổ chức.",
+      P: "Linh hoạt (Perceiving): bạn thích sự tự do, linh hoạt."
+    };
+
+    let html = '<div style="margin-top:8px"><strong style="font-size:20px;color:#fff">MBTI: '+mbti+'</strong></div>';
+    html += '<div style="margin-top:10px"><strong>Giải thích ngắn:</strong></div><ul>';
+    html += '<li>'+desc[l1]+'</li>';
+    html += '<li>'+desc[l2]+'</li>';
+    html += '<li>'+desc[l3]+'</li>';
+    html += '<li>'+desc[l4]+'</li>';
+    html += '</ul>';
+    html += '<div class="score"><strong>Điểm:</strong> E/I '+(counts.E||0)+'/'+(counts.I||0)+' — S/N '+(counts.S||0)+'/'+(counts.N||0)+' — T/F '+(counts.T||0)+'/'+(counts.F||0)+' — J/P '+(counts.J||0)+'/'+(counts.P||0)+'</div>';
+    if(obj.timestamp) html += '<div class="muted" style="margin-top:8px">Thời gian: '+ (new Date(obj.timestamp)).toLocaleString() +'</div>';
+    content.innerHTML = html;
+    actions.style.display = 'flex';
+  }
+
+  // read from localStorage
+  let raw = null;
+  try {
+    raw = localStorage.getItem('mbti_result');
+  } catch(e){
+    console.warn('Không đọc được localStorage', e);
+    raw = null;
+  }
+  const parsed = raw ? JSON.parse(raw) : null;
+  render(parsed);
+
+  // actions
+  document.getElementById('closeBtn').addEventListener('click', function(){
+    window.close();
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    const text = content.innerText || content.textContent;
+    navigator.clipboard?.writeText(text).then(()=>{
+      alert('Đã sao chép kết quả vào clipboard.');
+    }).catch(()=> alert('Không thể sao chép — có thể trình duyệt không cho phép.'));
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', function(){
+    const dataStr = JSON.stringify(parsed || {}, null, 2);
+    const blob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'mbti_result.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Trắc nghiệm MBTI - Main</title>
+<style>
+  :root{
+    --bg:#0f172a; --card:#0b1220; --accent:#7c3aed; --muted:#9aa7bf; --text:#e6eef8;
+  }
+  body{font-family:system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;background:linear-gradient(180deg,#071026,#0f172a);color:var(--text);margin:0;padding:24px}
+  .wrap{max-width:1000px;margin:12px auto;padding:20px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+  h1{text-align:center;color:var(--accent);margin:6px 0 4px;font-size:24px}
+  p.lead{text-align:center;color:var(--muted);margin-bottom:18px}
+  .q{background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;margin-bottom:10px}
+  .q h3{margin:0 0 6px;font-size:15px}
+  .opts label{display:block;cursor:pointer;padding:6px 8px;border-radius:6px;margin:6px 0}
+  .opts input{margin-right:8px}
+  .btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+  .btn{background:var(--accent);color:white;padding:10px 16px;border-radius:10px;border:none;font-weight:600;cursor:pointer}
+  .btn.secondary{background:#2b394f}
+  .note{color:var(--muted);font-size:13px;margin-top:8px;text-align:center}
+  .requiredHint{color:#ffcccb;font-size:13px;margin-top:8px;text-align:center}
+  @media (max-width:600px){.opts label{font-size:14px}}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Trắc nghiệm MBTI</h1>
+    <p class="lead">Chọn 1 phương án (A/B/C/D) cho tất cả câu. Sau khi nộp, kết quả sẽ mở ở <strong>result.html</strong> (tab mới).</p>
+
+    <form id="quizForm" onsubmit="return false;">
+      <!-- === 31 câu hỏi (giữ nguyên như yêu cầu) === -->
+      <!-- For brevity here we'll include the same 31 questions previously used. Copy-paste full block. -->
+      <!-- Questions 1-8 (E/I) -->
+      <div class="q"><h3>1. Trong một buổi tiệc, bạn sẽ:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q1" value="A"> A. Chủ động bắt chuyện với tất cả mọi người, kể cả người lạ</label>
+          <label><input type="radio" name="q1" value="B"> B. Nói chuyện với vài người quen rồi lan dần sang người lạ</label>
+          <label><input type="radio" name="q1" value="C"> C. Chỉ ở cạnh nhóm bạn thân của mình</label>
+          <label><input type="radio" name="q1" value="D"> D. Tìm góc yên tĩnh hoặc kiếm cớ về sớm</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>2. Tại các buổi gặp mặt, bạn sẽ:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q2" value="A"> A. Ở lại đến cuối cùng để tận hưởng không khí</label>
+          <label><input type="radio" name="q2" value="B"> B. Chuyển từ nhóm này sang nhóm khác để giao lưu</label>
+          <label><input type="radio" name="q2" value="C"> C. Tham gia một lúc rồi kiếm góc riêng</label>
+          <label><input type="radio" name="q2" value="D"> D. Chào hỏi xã giao rồi về sớm</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>3. Trong nhóm, bạn thường là người:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q3" value="A"> A. Luôn cập nhật mọi tin tức nhanh nhất</label>
+          <label><input type="radio" name="q3" value="B"> B. Là người truyền thông tin cho người khác</label>
+          <label><input type="radio" name="q3" value="C"> C. Hay biết sau cùng vì không quan tâm lắm</label>
+          <label><input type="radio" name="q3" value="D"> D. Biết rồi nhưng không nói vì không cần thiết</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>4. Bạn cảm thấy điều nào đúng với mình hơn:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q4" value="A"> A. Tôi nói nhiều hơn khi nghĩ được gì là nói luôn</label>
+          <label><input type="radio" name="q4" value="B"> B. Tôi thoải mái với việc nói liên tục nếu ai đó lắng nghe</label>
+          <label><input type="radio" name="q4" value="C"> C. Tôi chỉ nói khi có điều cần nói</label>
+          <label><input type="radio" name="q4" value="D"> D. Tôi thích lắng nghe hơn là tham gia vào câu chuyện</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>5. Khi tham gia một sự kiện đông người, bạn:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q5" value="A"> A. Hòa nhập nhanh, bắt chuyện với nhiều người</label>
+          <label><input type="radio" name="q5" value="B"> B. Chủ động tạo niềm vui cho cả nhóm</label>
+          <label><input type="radio" name="q5" value="C"> C. Ở yên với nhóm nhỏ mình quen</label>
+          <label><input type="radio" name="q5" value="D"> D. Tìm góc yên tĩnh hoặc đứng một mình</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>6. Bạn thiên về:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q6" value="A"> A. Tin vào những gì mắt thấy tai nghe rõ ràng</label>
+          <label><input type="radio" name="q6" value="B"> B. Dựa trên kinh nghiệm thực tế đã từng trải</label>
+          <label><input type="radio" name="q6" value="C"> C. Nghĩ xa về những khả năng có thể xảy ra</label>
+          <label><input type="radio" name="q6" value="D"> D. Đưa ra giả thuyết và liên tục tưởng tượng</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>7. Điều gì khiến bạn cảm thấy tệ hơn?</h3>
+        <div class="opts">
+          <label><input type="radio" name="q7" value="A"> A. Mơ mộng quá mức, không thực tế</label>
+          <label><input type="radio" name="q7" value="B"> B. Người chỉ biết lý thuyết mà không hành động</label>
+          <label><input type="radio" name="q7" value="C"> C. Làm đi làm lại những việc giống nhau</label>
+          <label><input type="radio" name="q7" value="D"> D. Không có gì mới mẻ để khám phá</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>8. Tuýp người nào sẽ thu hút bạn hơn?</h3>
+        <div class="opts">
+          <label><input type="radio" name="q8" value="A"> A. Người logic, nói gì cũng có lý</label>
+          <label><input type="radio" name="q8" value="B"> B. Người thực tế, nói là làm</label>
+          <label><input type="radio" name="q8" value="C"> C. Người sáng tạo, tưởng tượng phong phú</label>
+          <label><input type="radio" name="q8" value="D"> D. Người truyền cảm hứng bằng cảm xúc</label>
+        </div>
+      </div>
+
+      <!-- Questions 9-15 (S/N) -->
+      <div class="q"><h3>9. Bạn hứng thú hơn với những sự việc:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q9" value="A"> A. Những chuyện đang diễn ra rõ ràng trước mắt</label>
+          <label><input type="radio" name="q9" value="B"> B. Những gì có thể đo lường và kiểm tra được</label>
+          <label><input type="radio" name="q9" value="C"> C. Những khả năng mới còn chưa ai biết tới</label>
+          <label><input type="radio" name="q9" value="D"> D. Những giả thuyết thú vị chưa được chứng minh</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>10. Cách bạn giải quyết những công việc thường ngày là:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q10" value="A"> A. Làm đúng như cách người khác đã chỉ</label>
+          <label><input type="radio" name="q10" value="B"> B. Làm theo trình tự đã có sẵn</label>
+          <label><input type="radio" name="q10" value="C"> C. Nghĩ ra cách riêng của mình</label>
+          <label><input type="radio" name="q10" value="D"> D. Làm theo cảm hứng, mỗi lần một kiểu</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>11. Khi bạn gặp một vấn đề mới, bạn sẽ:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q11" value="A"> A. Tìm hiểu xem người khác đã từng làm thế nào</label>
+          <label><input type="radio" name="q11" value="B"> B. Làm theo hướng dẫn có sẵn</label>
+          <label><input type="radio" name="q11" value="C"> C. Nghĩ cách giải quyết theo kiểu riêng của mình</label>
+          <label><input type="radio" name="q11" value="D"> D. Ngồi tưởng tượng trước khi bắt tay vào làm</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>12. Bạn thích kiến thức kiểu nào hơn?</h3>
+        <div class="opts">
+          <label><input type="radio" name="q12" value="A"> A. Những thứ rõ ràng, thực tế</label>
+          <label><input type="radio" name="q12" value="B"> B. Số liệu, thông tin cụ thể</label>
+          <label><input type="radio" name="q12" value="C"> C. Những ý tưởng mới lạ, khả năng tương lai</label>
+          <label><input type="radio" name="q12" value="D"> D. Những điều trừu tượng, mang tính suy luận</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>13. Bạn nhớ tốt hơn những gì:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q13" value="A"> A. Những việc đã từng trải qua thực tế</label>
+          <label><input type="radio" name="q13" value="B"> B. Những điều ai đó nói rõ ràng, cụ thể</label>
+          <label><input type="radio" name="q13" value="C"> C. Những ý tưởng, khái niệm chung chung</label>
+          <label><input type="radio" name="q13" value="D"> D. Những điều mình tự suy ra từ ngữ cảnh</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>14. Khi ra quyết định, bạn thường dựa trên điều gì?</h3>
+        <div class="opts">
+          <label><input type="radio" name="q14" value="A"> A. Số liệu và logic rõ ràng</label>
+          <label><input type="radio" name="q14" value="B"> B. Cảm xúc của bản thân hoặc người khác</label>
+          <label><input type="radio" name="q14" value="C"> C. So sánh lợi hại rồi mới tính</label>
+          <label><input type="radio" name="q14" value="D"> D. Quan tâm người khác nghĩ gì trước</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>15. Khi tranh luận với ai đó, bạn...</h3>
+        <div class="opts">
+          <label><input type="radio" name="q15" value="A"> A. Trình bày quan điểm thẳng thắn, đúng là đúng</label>
+          <label><input type="radio" name="q15" value="B"> B. Cố gắng giữ hòa khí, tránh làm người khác buồn</label>
+          <label><input type="radio" name="q15" value="C"> C. Dẫn chứng rõ ràng cho họ hiểu</label>
+          <label><input type="radio" name="q15" value="D"> D. Nhẹ nhàng góp ý để không ai tổn thương</label>
+        </div>
+      </div>
+
+      <!-- Questions 16-22 (T/F) -->
+      <div class="q"><h3>16. Nếu phải tranh luận, bạn sẽ:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q16" value="A"> A. Dùng lý luận logic để phản biện</label>
+          <label><input type="radio" name="q16" value="B"> B. Đưa ra bằng chứng và dẫn chứng cụ thể</label>
+          <label><input type="radio" name="q16" value="C"> C. Nói sao cho người kia không bị tổn thương</label>
+          <label><input type="radio" name="q16" value="D"> D. Chọn cách hòa giải, tránh gay gắt</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>17. Khi bạn góp ý cho ai đó làm sai, bạn sẽ...</h3>
+        <div class="opts">
+          <label><input type="radio" name="q17" value="A"> A. Nói thẳng luôn để họ sửa nhanh</label>
+          <label><input type="radio" name="q17" value="B"> B. Nói vòng vòng để họ không buồn</label>
+          <label><input type="radio" name="q17" value="C"> C. Đưa ví dụ cụ thể, phân tích lỗi</label>
+          <label><input type="radio" name="q17" value="D"> D. Đợi lúc thích hợp rồi nhắc khéo</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>18. Bạn muốn người khác nghĩ mình là...</h3>
+        <div class="opts">
+          <label><input type="radio" name="q18" value="A"> A. Người lý trí và đáng tin</label>
+          <label><input type="radio" name="q18" value="B"> B. Người dễ thương và quan tâm người khác</label>
+          <label><input type="radio" name="q18" value="C"> C. Người rõ ràng và có lập trường</label>
+          <label><input type="radio" name="q18" value="D"> D. Người thân thiện và hòa hợp</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>19. Khi xem phim, bạn thích...</h3>
+        <div class="opts">
+          <label><input type="radio" name="q19" value="A"> A. Những phim tư duy, logic, hack não</label>
+          <label><input type="radio" name="q19" value="B"> B. Những phim cảm xúc, truyền cảm hứng</label>
+          <label><input type="radio" name="q19" value="C"> C. Phim phân tích tâm lý tội phạm</label>
+          <label><input type="radio" name="q19" value="D"> D. Phim tình cảm hoặc gắn kết con người</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>20. Khi làm bài tập hay dự án, bạn thích...</h3>
+        <div class="opts">
+          <label><input type="radio" name="q20" value="A"> A. Lập kế hoạch trước rồi làm theo</label>
+          <label><input type="radio" name="q20" value="B"> B. Làm tới đâu tính tới đó</label>
+          <label><input type="radio" name="q20" value="C"> C. Chia checklist và làm từng bước rõ ràng</label>
+          <label><input type="radio" name="q20" value="D"> D. Cảm hứng tới đâu làm tới đó</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>21. Bàn học hoặc không gian làm việc của bạn thường...</h3>
+        <div class="opts">
+          <label><input type="radio" name="q21" value="A"> A. Ngăn nắp, mọi thứ đúng vị trí</label>
+          <label><input type="radio" name="q21" value="B"> B. Hơi bừa nhưng bạn biết món nào ở đâu</label>
+          <label><input type="radio" name="q21" value="C"> C. Sắp xếp theo trật tự riêng</label>
+          <label><input type="radio" name="q21" value="D"> D. Đụng đâu để đó miễn tìm được là được</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>22. Khi phân tích một vấn đề, bạn thường:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q22" value="A"> A. Tách vấn đề thành các phần logic</label>
+          <label><input type="radio" name="q22" value="B"> B. Dùng số liệu, bằng chứng để kết luận</label>
+          <label><input type="radio" name="q22" value="C"> C. Xem xét cảm xúc và mối quan hệ liên quan</label>
+          <label><input type="radio" name="q22" value="D"> D. Tìm cách dung hòa các bên</label>
+        </div>
+      </div>
+
+      <!-- Questions 23-30 (J/P) -->
+      <div class="q"><h3>23. Bạn thích lập một kế hoạch cụ thể cho kỳ nghỉ hay:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q23" value="A"> A. Có lịch trình rõ ràng, các hoạt động sắp xếp trước</label>
+          <label><input type="radio" name="q23" value="B"> B. Chuẩn bị xong rồi vẫn linh hoạt thay đổi</label>
+          <label><input type="radio" name="q23" value="C"> C. Để mọi thứ tự nhiên, phát sinh lúc đó làm</label>
+          <label><input type="radio" name="q23" value="D"> D. Chỉ biết hôm nay thế nào làm hôm đó</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>24. Khi làm việc nhóm, bạn thường:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q24" value="A"> A. Phân công, sắp xếp công việc rõ ràng</label>
+          <label><input type="radio" name="q24" value="B"> B. Làm phần của mình và điều chỉnh khi cần</label>
+          <label><input type="radio" name="q24" value="C"> C. Chờ xem mọi người làm thế nào rồi hợp tác</label>
+          <label><input type="radio" name="q24" value="D"> D. Làm theo cảm hứng của tập thể</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>25. Bạn cảm thấy thoải mái khi:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q25" value="A"> A. Mọi thứ đã được lên kế hoạch kỹ</label>
+          <label><input type="radio" name="q25" value="B"> B. Có khung sườn, còn có thể đổi</label>
+          <label><input type="radio" name="q25" value="C"> C. Tự do, không bị ràng buộc lịch trình</label>
+          <label><input type="radio" name="q25" value="D"> D. Theo cảm giác lúc đó, miễn vui là được</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>26. Khi hoàn thành một mục tiêu, bạn thích:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q26" value="A"> A. Check list hoàn tất, gạch đầu dòng rõ ràng</label>
+          <label><input type="radio" name="q26" value="B"> B. Cảm giác linh hoạt nhưng vẫn có kết quả</label>
+          <label><input type="radio" name="q26" value="C"> C. Không cần danh sách, chỉ nhờ cảm hứng</label>
+          <label><input type="radio" name="q26" value="D"> D. Hồn nhiên, làm xong rồi mới suy nghĩ tiếp</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>27. Khi phải đưa ra quyết định quan trọng, bạn:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q27" value="A"> A. Lập bảng ưu nhược và chọn theo kế hoạch</label>
+          <label><input type="radio" name="q27" value="B"> B. Chuẩn bị phương án rồi chọn linh hoạt</label>
+          <label><input type="radio" name="q27" value="C"> C. Để trực giác dẫn dắt</label>
+          <label><input type="radio" name="q27" value="D"> D. Chờ cảm giác an tâm rồi quyết</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>28. Người thân nói bạn là người:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q28" value="A"> A. Có tổ chức, biết sắp xếp</label>
+          <label><input type="radio" name="q28" value="B"> B. Dễ thích nghi, không câu nệ</label>
+          <label><input type="radio" name="q28" value="C"> C. Thích tự do, ít ràng buộc</label>
+          <label><input type="radio" name="q28" value="D"> D. Tùy lúc, khi thì ngăn nắp khi thì lộn xộn</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>29. Bạn chuẩn bị trước cho những việc:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q29" value="A"> A. Rất kỹ càng, tránh phát sinh</label>
+          <label><input type="radio" name="q29" value="B"> B. Chuẩn bị nhưng sẵn sàng linh hoạt</label>
+          <label><input type="radio" name="q29" value="C"> C. Ít chuẩn bị, thích thử nghiệm</label>
+          <label><input type="radio" name="q29" value="D"> D. Không muốn bị ràng buộc bởi lịch</label>
+        </div>
+      </div>
+
+      <div class="q"><h3>30. Khi lịch trình thay đổi đột ngột, bạn:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q30" value="A"> A. Nhớ và điều chỉnh theo lịch mới</label>
+          <label><input type="radio" name="q30" value="B"> B. Chấp nhận và sắp xếp lại</label>
+          <label><input type="radio" name="q30" value="C"> C. Vui vì có điều mới</label>
+          <label><input type="radio" name="q30" value="D"> D. Không quan tâm lắm</label>
+        </div>
+      </div>
+
+      <!-- Question 31 (extra E/I) -->
+      <div class="q"><h3>31. Bạn nạp năng lượng khi:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q31" value="A"> A. Ở bên nhiều người, trò chuyện sôi nổi</label>
+          <label><input type="radio" name="q31" value="B"> B. Vẫn thấy hứng khi tiếp xúc xã hội</label>
+          <label><input type="radio" name="q31" value="C"> C. Ở một mình, có thời gian riêng tư</label>
+          <label><input type="radio" name="q31" value="D"> D. Ở yên và tĩnh để hồi phục năng lượng</label>
+        </div>
+      </div>
+
+      <div class="btns">
+        <button type="button" id="submitBtn" class="btn">Nộp và mở kết quả (result.html)</button>
+        <button type="button" id="resetBtn" class="btn secondary">Đặt lại</button>
+      </div>
+
+      <p class="requiredHint">Bạn phải trả lời đầy đủ 31 câu mới có thể nộp.</p>
+      <p class="note">Ghi chú: đây là bản trắc nghiệm tham khảo, không phải chẩn đoán chuyên sâu.</p>
+    </form>
+  </div>
+
+<script>
+(function(){
+  const TOTAL = 31;
+  const form = document.getElementById('quizForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  // tìm câu chưa trả lời (trả về index hoặc null)
+  function firstUnanswered(){
+    for(let i=1;i<=TOTAL;i++){
+      const radios = form['q'+i];
+      if(!radios) continue;
+      let answered = false;
+      if(radios.length){
+        for(const r of radios) if(r.checked){ answered = true; break; }
+      } else {
+        if(radios.value) answered = true;
+      }
+      if(!answered) return i;
+    }
+    return null;
+  }
+
+  function computeCounts(){
+    const counts = {E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+    for(let i=1;i<=TOTAL;i++){
+      const radios = form['q'+i];
+      if(!radios) continue;
+      let val = null;
+      if(radios.length){
+        for(const r of radios) if(r.checked){ val = r.value; break; }
+      } else {
+        val = radios.value || null;
+      }
+      if(!val) continue; // should not happen after validation
+      let dim = null;
+      if((i>=1 && i<=8) || i===31) dim = 'EI';
+      else if(i>=9 && i<=15) dim = 'SN';
+      else if(i>=16 && i<=22) dim = 'TF';
+      else if(i>=23 && i<=30) dim = 'JP';
+      const ab = (val === 'A' || val === 'B');
+      if(dim==='EI'){ if(ab) counts.E++; else counts.I++; }
+      else if(dim==='SN'){ if(ab) counts.S++; else counts.N++; }
+      else if(dim==='TF'){ if(ab) counts.T++; else counts.F++; }
+      else if(dim==='JP'){ if(ab) counts.J++; else counts.P++; }
+    }
+    return counts;
+  }
+
+  function buildResultObject(counts){
+    const l1 = (counts.E >= counts.I) ? 'E' : 'I';
+    const l2 = (counts.S >= counts.N) ? 'S' : 'N';
+    const l3 = (counts.T >= counts.F) ? 'T' : 'F';
+    const l4 = (counts.J >= counts.P) ? 'J' : 'P';
+    const mbti = l1 + l2 + l3 + l4;
+    return {
+      mbti,
+      counts,
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  submitBtn.addEventListener('click', function(){
+    const missing = firstUnanswered();
+    if(missing !== null){
+      // scroll to first unanswered, highlight container
+      const container = document.querySelector('.q:nth-of-type(' + missing + ')') || document.querySelector('[name="q'+missing+'"]').closest('.q');
+      if(container){
+        container.scrollIntoView({behavior:'smooth', block:'center'});
+        const old = container.style.boxShadow;
+        container.style.boxShadow = '0 0 0 4px rgba(199,125,255,0.18)';
+        setTimeout(()=> container.style.boxShadow = old, 1400);
+      }
+      alert('Bạn chưa trả lời câu số ' + missing + '. Vui lòng hoàn tất 31 câu rồi nộp.');
+      return;
+    }
+
+    // tính điểm
+    const counts = computeCounts();
+    const resultObj = buildResultObject(counts);
+
+    try {
+      // lưu vào localStorage (để result.html đọc)
+      localStorage.setItem('mbti_result', JSON.stringify(resultObj));
+    } catch(e){
+      console.error('Lỗi ghi localStorage', e);
+      alert('Không thể lưu kết quả vào localStorage. Kiểm tra chế độ trình duyệt (private mode có thể gây lỗi).');
+      return;
+    }
+
+    // mở result.html trong tab mới cùng origin
+    const newWin = window.open('result.html', '_blank');
+    if(!newWin){
+      alert('Trình duyệt có thể đang chặn cửa sổ pop-up. Hãy cho phép pop-up cho trang này rồi thử lại; kết quả đã được lưu tạm (localStorage).');
+      // vẫn ở lại trang hiện tại; result.html có thể mở thủ công
+    }
+  });
+
+  resetBtn.addEventListener('click', function(){
+    // xóa radio
+    const radios = form.querySelectorAll('input[type="radio"]');
+    radios.forEach(r => r.checked = false);
+    // xóa dữ liệu localStorage liên quan
+    try {
+      localStorage.removeItem('mbti_result');
+    } catch(e){
+      console.warn('Không thể xóa localStorage', e);
+    }
+    // scroll top và thông báo nhẹ
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+})();
+</script>
+</body>
+</html>
