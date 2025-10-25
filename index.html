@@ -14,14 +14,64 @@
   p.lead{text-align:center;color:var(--muted);margin-bottom:18px}
   .q{background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;margin-bottom:10px}
   .q h3{margin:0 0 6px;font-size:15px}
-  .opts label{display:block;cursor:pointer;padding:6px 8px;border-radius:6px;margin:6px 0}
-  .opts input{margin-right:8px}
+  .opts label{display:block;cursor:pointer;padding:8px 10px;border-radius:6px;margin:6px 0; transition: background-color 0.2s ease;}
+  .opts label:hover { background-color: rgba(124, 58, 237, 0.1); }
   .btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px}
   .btn{background:var(--accent);color:white;padding:10px 16px;border-radius:10px;border:none;font-weight:600;cursor:pointer}
   .btn.secondary{background:#2b394f}
   .note{color:var(--muted);font-size:13px;margin-top:8px;text-align:center}
   .requiredHint{color:#ffcccb;font-size:13px;margin-top:8px;text-align:center}
   @media (max-width:600px){.opts label{font-size:14px}}
+
+  /* === PHẦN CSS TRANG TRÍ RADIO BUTTON === */
+  .opts label {
+    display: flex; /* Sắp xếp input và text trên cùng 1 hàng */
+    align-items: center; /* Căn giữa theo chiều dọc */
+  }
+
+  .opts input[type="radio"] {
+    /* Ẩn radio button mặc định */
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    margin: 0;
+
+    /* Tạo radio button tùy chỉnh */
+    font: inherit;
+    color: currentColor;
+    width: 1.2em;
+    height: 1.2em;
+    border: 2px solid var(--muted);
+    border-radius: 50%;
+    margin-right: 12px; /* Khoảng cách với text */
+    position: relative;
+    transition: border-color 0.2s ease;
+  }
+
+  /* Tạo chấm tròn bên trong khi được chọn */
+  .opts input[type="radio"]::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0); /* Mặc định ẩn đi */
+    width: 0.7em;
+    height: 0.7em;
+    border-radius: 50%;
+    background-color: var(--accent);
+    transition: transform 0.2s ease;
+  }
+
+  /* Khi radio được chọn (checked) */
+  .opts input[type="radio"]:checked {
+    border-color: var(--accent); /* Đổi màu viền */
+  }
+
+  .opts input[type="radio"]:checked::after {
+    transform: translate(-50%, -50%) scale(1); /* Hiển thị chấm tròn */
+  }
+  /* === KẾT THÚC PHẦN CSS TRANG TRÍ === */
+
 </style>
 </head>
 <body>
